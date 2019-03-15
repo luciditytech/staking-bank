@@ -1,4 +1,4 @@
-# Staking Banok
+# Staking Bank
 
 Staking token manager for andromeda consensus.
 
