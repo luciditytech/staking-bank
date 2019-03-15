@@ -6,12 +6,12 @@ const {
   deployVerifierRegistry,
   deployHumanStandardToken,
   deployChain,
-} = require('../inc/deployers');
+} = require('../helpers/deployers');
 
 
-const { getNextProposeStartBlock, getNextRevealStartBlock } = require('../inc/chainCycleFunctions');
+const { getNextProposeStartBlock, getNextRevealStartBlock } = require('../helpers/chainCycleFunctions');
 
-const { mineBlock, ethBlockNumber } = require('../inc/helpers');
+const { mineBlock, ethBlockNumber } = require('../helpers/functions');
 
 contract('StakingBank', (accounts) => {
   let contractRegistry;

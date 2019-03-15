@@ -17,9 +17,5 @@ module.exports = (deployer, network, accounts) => deployer.then(async () => {
 
   await stakingBankStorage.initStorageOwner(instance.address);
 
-  const ContractRegistry = artifacts.require('ContractRegistry');
-  const contractRegistry = await ContractRegistry.at(config.ContractRegistry.address);
-  await contractRegistry.add(StakingBank.address);
-
   return instance;
 });
