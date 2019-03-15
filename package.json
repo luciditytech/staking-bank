@@ -30,7 +30,7 @@
     "bignumber.js": "8.1.1",
     "bn.js": "4.11.8",
     "contract-registry": "git+ssh://git@github.com/luciditytech/contract-registry.git#9c2fe02184f6ce70e836e03aee117ef27dfe7ec4",
-    "digivice": "git+ssh://git@github.com/luciditytech/digivice.git#develop",
+    "digivice": "git+ssh://git@github.com/luciditytech/digivice.git#e4ac6b53aaa9a93f00fd0e52d20f4f8f9b48c658",
     "ethereumjs-util": "6.1.0",
     "ethjs-provider-http": "0.1.6",
     "ethjs-query": "0.3.8",
