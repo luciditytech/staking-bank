@@ -63,3 +63,13 @@ const ContractRegistry = artifacts.require('ContractRegistry');
 const contractRegistry = await ContractRegistry.at(config.ContractRegistry.address);
 await contractRegistry.add(StakingBank.address);
 ```
+
+### Addresses
+
+#### Storage
+
+- staging: 0xa37c1f72b355acc14b49dfa15437da3b99372a62
+
+#### Contract
+
+- staging: 0x357d9959ae144ed97091e072b24199ef2f138963
