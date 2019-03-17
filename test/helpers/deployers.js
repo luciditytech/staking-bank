@@ -1,38 +1,29 @@
-const StakingBankStorage = artifacts.require('StakingBankStorage');
-const StakingBank = artifacts.require('StakingBank');
-const ContractRegistry = artifacts.require('ContractRegistry');
-const VerifierRegistryStorage = artifacts.require('VerifierRegistryStorage');
-const VerifierRegistry = artifacts.require('VerifierRegistry');
-const HumanStandardToken = artifacts.require('HumanStandardToken');
-const Chain = artifacts.require('Chain');
+const StakingBankStorageArtifact = artifacts.require('StakingBankStorage');
+const StakingBankArtifact = artifacts.require('StakingBank');
+const ContractRegistryArtifact = artifacts.require('ContractRegistry');
+const VerifierRegistryArtifact = artifacts.require('VerifierRegistry');
+const HumanStandardTokenArtifact = artifacts.require('HumanStandardToken');
+const ChainArtifact = artifacts.require('Chain');
 
-const verifierRegistryConfig = require('digivice/config/development');
 const tokenConf = require('token-sale-contracts/conf/development');
-const chainConf = require('andromeda/config/development');
 
 const StakingBankUtil = require('../ministro-contracts/ministroStakingBank');
 
-const deployContractRegistry = async () => ContractRegistry.new();
+const deployContractRegistry = async () => ContractRegistryArtifact.new();
 
-const deployVerifierRegistry = async (contractRegistryAddr) => {
-  const contractRegistry = await ContractRegistry.at(contractRegistryAddr);
+const deployVerifierRegistry = async (contractRegistryAddr, verifiersPerShard) => {
+  const contractRegistry = await ContractRegistryArtifact.at(contractRegistryAddr);
 
-  const vrStorage = await VerifierRegistryStorage.new(
-    verifierRegistryConfig.VerifierRegistry.verifiersPerShard,
+  const verifierRegistry = await VerifierRegistryArtifact.new(
+    verifiersPerShard,
   );
 
-  const verifierRegistry = await VerifierRegistry.new(
-    contractRegistry.address,
-    vrStorage.address,
-  );
-
-  await vrStorage.initStorageOwner(verifierRegistry.address);
   await contractRegistry.add(verifierRegistry.address);
 
   return verifierRegistry;
 };
 
-const deployHumanStandardToken = async () => HumanStandardToken.new(
+const deployHumanStandardToken = async () => HumanStandardTokenArtifact.new(
   tokenConf.total,
   tokenConf.name,
   tokenConf.decimals,
@@ -40,30 +31,30 @@ const deployHumanStandardToken = async () => HumanStandardToken.new(
 );
 
 const deployChain = async (contractRegistryAddr) => {
-  const contractRegistry = await ContractRegistry.at(contractRegistryAddr);
+  const contractRegistry = await ContractRegistryArtifact.at(contractRegistryAddr);
 
-  const chain = await Chain.new(
-    contractRegistry.address,
-    chainConf.Chain.blocksPerPhase,
-  );
+  const chain = await ChainArtifact.new();
 
   await contractRegistry.add(chain.address);
 
   return chain;
 };
 
-const deployStakingBank = async (owner, contractRegistryAddr, tokenAddr) => {
-  const contractRegistry = await ContractRegistry.at(contractRegistryAddr);
+const deployStakingBank = async (owner, tokenAddr) => {
+  const contractRegistry = await deployContractRegistry();
 
-  const storage = await StakingBankStorage.new(tokenAddr);
+  const storage = await StakingBankStorageArtifact.new(tokenAddr);
 
-  const stakingBankInstance = await StakingBank.new(
-    contractRegistryAddr,
+  const stakingBankInstance = await StakingBankArtifact.new(
+    contractRegistry.address,
     storage.address,
   );
 
   await storage.initStorageOwner(stakingBankInstance.address);
   await contractRegistry.add(stakingBankInstance.address);
+
+  await deployVerifierRegistry(contractRegistry.address, 100);
+  await deployChain(contractRegistry.address);
 
   const ministroStakingBank = StakingBankUtil();
   ministroStakingBank.setInstanceVar(stakingBankInstance);
@@ -76,9 +67,6 @@ const deployStakingBank = async (owner, contractRegistryAddr, tokenAddr) => {
 };
 
 module.exports = {
-  deployContractRegistry,
-  deployVerifierRegistry,
   deployHumanStandardToken,
-  deployChain,
   deployStakingBank,
 };
