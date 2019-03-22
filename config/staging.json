@@ -2,5 +2,8 @@
   "StakingBank": {
     "name": "0x5374616b696e6742616e6b000000000000000000000000000000000000000000",
     "address": ""
+  },
+  "HumanStandardToken": {
+    "address": "0x9e6c9e2cb72bb90f7d5c232924fd749165dbe622"
   }
 }
