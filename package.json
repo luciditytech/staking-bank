@@ -11,7 +11,10 @@
     "lint:js": "./node_modules/.bin/eslint ./test --no-ignore --ext .js --fix",
     "lint": "npm run lint:js && npm run lint:solium",
     "test": "scripts/test.sh",
-    "coverage": "./node_modules/.bin/solidity-coverage"
+    "coverage": "./node_modules/.bin/solidity-coverage",
+    "src:storage": "./node_modules/.bin/truffle-flattener ./contracts/StakingBankStorage.sol > all_storage.sol",
+    "src:contract": "./node_modules/.bin/truffle-flattener ./contracts/StakingBank.sol > all.sol",
+    "src": "npm run src:storage && npm run src:contract"
   },
   "repository": {
     "type": "git",
